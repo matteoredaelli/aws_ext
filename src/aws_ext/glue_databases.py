@@ -4,7 +4,8 @@ This module contains some useful functionsl like delete_old_table_versions
 
 """
 
-import aws_ext.glue_tables
+import logging
+from . import glue_tables
 
 
 def get_all_tables(glue_client, database_name):
@@ -14,7 +15,8 @@ def get_all_tables(glue_client, database_name):
     result = []
     for page in page_iterator:
         tablenames = list(map(lambda t: t["Name"], page["TableList"]))
-        result.append(tablenames)
+        result = result + tablenames
+    logging.debug(f"Found tables {result}")
     return result
 
 
@@ -39,3 +41,13 @@ def delete_all_tables(glue_client, database_name, dryrun=False):
     return glue_client.batch_delete_table(
         DatabaseName=database_name, TablesToDelete=tablenames
     )
+
+def delete_old_tables_versions(glue_client, database_name, keep, dryrun=False):
+    if int(keep) < 1:
+        logging.error(f"cannot delete all table versions: keep={keep} must be greater than 0")
+        return 1
+    tablenames = get_all_tables(glue_client, database_name)
+    logging.warning(f"Deleting table versions fro tables {tablenames}")
+    for table_name in tablenames:
+        glue_tables.delete_old_table_versions(glue_client, database_name, table_name, keep, dryrun=dryrun)
+    return 0
