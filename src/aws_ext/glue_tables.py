@@ -7,14 +7,17 @@ import logging
 from botocore.exceptions import ClientError
 
 
-def delete_table_version(glue_client, database_name, table_name, version_id):
+def delete_table_version(glue_client, database_name, table_name, version_ids, dryrun=False):
     """delete_table_version"""
     try:
-        logging.warning(f"Deleting version {version_id} for table {tablename}")
-        response = glue_client.batch_delete_table_version(
-            DatabaseName=database_name, Name=table_name, VersionId=version_id
-        )
-
+        logging.warning(f"Deleting version {version_ids} for table {table_name}")
+        if dryrun:
+            logging.warning(f"Dryrun: nothing will be changed")
+            response = 1
+        else:
+            response = glue_client.batch_delete_table_version(
+                DatabaseName=database_name, TableName=table_name, VersionIds=version_ids
+            )
         return response
     except ClientError as e:
         raise Exception(
@@ -35,11 +38,11 @@ def get_table_version_ids(glue_client, database_name, table_name):
     return alist
 
 
-def delete_old_table_versions(glue_client, database_name, table_name, keep):
+def delete_old_table_versions(glue_client, database_name, table_name, keep, dryrun=False):
     versions = get_table_version_ids(glue_client, database_name, table_name)
-    logging.warning(f"Deleting old versions for table {tablename}using keep={keep}")
-    for version_id in versions[keep:]:
-        delete_table_version(glue_client, database_name, table_name, version_id)
+    logging.warning(f"Deleting old versions for table {table_name} keeping {keep} versions")
+    version_ids = versions[keep:]
+    delete_table_version(glue_client, database_name, table_name, version_ids, dryrun=dryrun)
 
 
 def count_table_versions(glue_client, database_name, table_name):
