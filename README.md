@@ -1,7 +1,7 @@
 # AWS EXT
 
 The aws_ext python package contains some useful functions (built on top of boto3)
-for managing some aws services. At teh moment only the Aws Glue Data catalog
+for managing some aws services. At the moment only some utilities for the Aws Glue Data catalog
 
 ## Installation
 
