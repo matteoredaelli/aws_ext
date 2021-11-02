@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="aws_ext",
-    version="0.0.4",
+    version="0.0.5",
     author="Matteo Redaelli",
     author_email="matteo.redaelli@gmail.com",
     description="AWS ext: some high level useful functions",

@@ -19,13 +19,18 @@ def delete_table_version(
             logging.warning(f"Dryrun: nothing will be changed")
             response = 1
         else:
-            version_ids_str = list(map(lambda t: str(t), version_ids))
-            response = glue_client.batch_delete_table_version(
-                DatabaseName=database_name,
-                TableName=table_name,
-                VersionIds=version_ids_str,
-            )
-        return response
+            ## split version in lists < 100
+            ## Member must have length less than or equal to 100
+            for ids in [
+                version_ids[i : i + 100] for i in range(0, len(version_ids), 100)
+            ]:
+                version_ids_str = list(map(lambda t: str(t), ids))
+                response = glue_client.batch_delete_table_version(
+                    DatabaseName=database_name,
+                    TableName=table_name,
+                    VersionIds=version_ids_str,
+                )
+        return True
     except ClientError as e:
         raise Exception("boto3 client error in delete_table_version: " + e.__str__())
     except Exception as e:
@@ -54,8 +59,7 @@ def get_table_version_ids(
     for page in page_iterator:
         alist = list(map(lambda t: int(t["VersionId"]), page["TableVersions"]))
         logging.debug(alist)
-        if alist:
-            result += alist
+        result += alist
     result.sort(reverse=True)
     return result
 
