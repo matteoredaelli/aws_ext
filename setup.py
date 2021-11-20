@@ -5,15 +5,19 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="aws_ext",
-    version="0.0.5",
+    version="0.0.6",
     author="Matteo Redaelli",
     author_email="matteo.redaelli@gmail.com",
-    description="AWS ext: some high level useful functions",
+    description="aws_ext is a set of high level useful functions",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/matteoredaelli/aws_ext",
     project_urls={
         "Bug Tracker": "https://github.com/matteoredaelli/aws_ext/issues",
+    },
+    license="GPL",
+    entry_points={
+        "console_scripts": ["aws_ext=aws_ext.command_line:main"],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
