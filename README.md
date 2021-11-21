@@ -9,7 +9,15 @@ for managing some aws services. At the moment only some utilities for the Aws Gl
 pip install aws_ext
 ```
 
-## Usage
+## Usage (command line)
+
+AWS_PROFILE=prd aws_ext get_tables_with_many_versions [] 10
+
+aws_ext get_tables_with_many_versions "[db1,db2]" 20
+
+aws_ext delete_old_tables_versions [] 10 False
+
+## Usage (python library)
 
 ```python
 import boto3
