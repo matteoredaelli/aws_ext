@@ -11,6 +11,8 @@ pip install aws_ext
 
 ## Usage (command line)
 
+export LOGLEVEL=INFO
+
 AWS_PROFILE=prd aws_ext get_tables_with_many_versions [] 10
 
 aws_ext get_tables_with_many_versions "[db1,db2]" 20
