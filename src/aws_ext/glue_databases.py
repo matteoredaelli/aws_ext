@@ -31,6 +31,13 @@ def get_all_tables(glue_client, database_name):
     return result
 
 
+def get_tables_count(glue_client, database_name):
+    tables = get_all_tables(glue_client, database_name)
+    result = len(tables)
+    logging.debug(f"Found tables {result}")
+    return result
+
+
 def get_tables_with_many_versions(glue_client, database_name, threshold):
     result = {}
     tablenames = get_all_tables(glue_client, database_name)

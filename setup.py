@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="aws_ext",
-    version="0.0.6",
+    version="0.0.7",
     author="Matteo Redaelli",
     author_email="matteo.redaelli@gmail.com",
     description="aws_ext is a set of high level useful functions",
