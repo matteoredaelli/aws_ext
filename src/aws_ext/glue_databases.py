@@ -31,7 +31,7 @@ def get_all_tables(glue_client, database_name):
     return result
 
 
-def get_tables_count(glue_client, database_name):
+def count_tables(glue_client, database_name):
     tables = get_all_tables(glue_client, database_name)
     result = len(tables)
     logging.debug(f"Found tables {result}")
@@ -48,6 +48,16 @@ def get_tables_with_many_versions(glue_client, database_name, threshold):
 
     ##sorted_dict = dict(sorted(result.items(), key=operator.itemgetter(1), reverse=True))
     return result  ## sorted_dict
+
+
+def count_tables_and_versions(glue_client, database_name):
+    tablenames = get_all_tables(glue_client, database_name)
+    result = len(tablenames)
+    for t in tablenames:
+        tot = glue_tables.count_table_versions(glue_client, database_name, t)
+        result += tot
+
+    return result
 
 
 def delete_all_tables(glue_client, database_name, dryrun=False):

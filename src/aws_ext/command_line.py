@@ -46,14 +46,31 @@ class AwsExt(object):
             )
             print(result)
 
-    def get_tables_count(self, databases=[]):
+    def count_tables(self, databases=[]):
+        tot = 0
         glue_client = _connect("glue")
         if databases == []:
             databases = aws_ext.glue_databases.get_all_databases(glue_client)
         for db in databases:
             logging.info(f"Entering db={db}")
-            result = aws_ext.glue_databases.get_tables_count(glue_client, db)
+            result = aws_ext.glue_databases.count_tables(glue_client, db)
             print(result)
+            tot += result
+        logging.info(f"Tot tables = {tot}")
+        return tot
+
+    def count_tables_and_versions(self, databases=[]):
+        tot = 0
+        glue_client = _connect("glue")
+        if databases == []:
+            databases = aws_ext.glue_databases.get_all_databases(glue_client)
+        for db in databases:
+            logging.info(f"Entering db={db}")
+            result = aws_ext.glue_databases.count_tables_and_versions(glue_client, db)
+            print(result)
+            tot += result
+        logging.info(f"Tot tables and versions = {tot}")
+        return tot
 
     def delete_old_tables_versions(self, databases=[], threshold=100, dryrun=True):
         glue_client = _connect("glue")
