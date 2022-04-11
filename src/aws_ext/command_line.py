@@ -46,6 +46,20 @@ class AwsExt(object):
             )
             print(result)
 
+    def exist_tables_with_many_versions(self, databases=[], threshold=100):
+        glue_client = _connect("glue")
+        if databases == []:
+            databases = aws_ext.glue_databases.get_all_databases(glue_client)
+        for db in databases:
+            logging.info(f"Entering db={db}")
+            result = aws_ext.glue_databases.exist_tables_with_many_versions(
+                glue_client, db, threshold
+            )
+            print(result)
+            if result:
+                return True
+        return False
+
     def count_tables(self, databases=[]):
         tot = 0
         glue_client = _connect("glue")

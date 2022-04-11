@@ -50,6 +50,19 @@ def get_tables_with_many_versions(glue_client, database_name, threshold):
     return result  ## sorted_dict
 
 
+def exist_tables_with_many_versions(glue_client, database_name, threshold):
+    result = False
+    tablenames = get_all_tables(glue_client, database_name)
+    for t in tablenames:
+        tot = glue_tables.count_table_versions(glue_client, database_name, t)
+        if tot >= threshold:
+            logging.warning(f"Table {t} has too many versions ({tot})")
+            return True
+
+    ##sorted_dict = dict(sorted(result.items(), key=operator.itemgetter(1), reverse=True))
+    return result  ## sorted_dict
+
+
 def count_tables_and_versions(glue_client, database_name):
     tablenames = get_all_tables(glue_client, database_name)
     result = len(tablenames)
