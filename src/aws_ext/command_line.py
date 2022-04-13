@@ -37,65 +37,36 @@ class AwsExt(object):
 
     def get_tables_with_many_versions(self, databases=[], threshold=100):
         glue_client = _connect("glue")
-        if databases == []:
-            databases = aws_ext.glue_databases.get_all_databases(glue_client)
-        for db in databases:
-            logging.info(f"Entering db={db}")
-            result = aws_ext.glue_databases.get_tables_with_many_versions(
-                glue_client, db, threshold
-            )
-            print(result)
+        result = aws_ext.glue_databases.get_tables_with_many_versions(
+            glue_client, databases, threshold
+        )
+        print(result)
 
     def exist_tables_with_many_versions(self, databases=[], threshold=100):
         glue_client = _connect("glue")
-        if databases == []:
-            databases = aws_ext.glue_databases.get_all_databases(glue_client)
-        for db in databases:
-            logging.info(f"Entering db={db}")
-            result = aws_ext.glue_databases.exist_tables_with_many_versions(
-                glue_client, db, threshold
-            )
-            print(result)
-            if result:
-                return True
-        return False
+        result = aws_ext.glue_databases.exist_tables_with_many_versions(
+            glue_client, databases, threshold
+        )
+        print(result)
 
     def count_tables(self, databases=[]):
-        tot = 0
         glue_client = _connect("glue")
-        if databases == []:
-            databases = aws_ext.glue_databases.get_all_databases(glue_client)
-        for db in databases:
-            logging.info(f"Entering db={db}")
-            result = aws_ext.glue_databases.count_tables(glue_client, db)
-            print(result)
-            tot += result
-        logging.info(f"Tot tables = {tot}")
-        return tot
+        result = aws_ext.glue_databases.count_tables(glue_client, databases)
+        print(result)
+        logging.info(f"Tot tables = {result}")
 
-    def count_tables_and_versions(self, databases=[]):
-        tot = 0
+    def count_tables_versions(self, databases=[]):
         glue_client = _connect("glue")
-        if databases == []:
-            databases = aws_ext.glue_databases.get_all_databases(glue_client)
-        for db in databases:
-            logging.info(f"Entering db={db}")
-            result = aws_ext.glue_databases.count_tables_and_versions(glue_client, db)
-            print(result)
-            tot += result
-        logging.info(f"Tot tables and versions = {tot}")
-        return tot
+        result = aws_ext.glue_databases.count_tables_versions(glue_client, databases)
+        print(result)
+        logging.info(f"Tot tables and versions = {result}")
 
     def delete_old_tables_versions(self, databases=[], threshold=100, dryrun=True):
         glue_client = _connect("glue")
-        if databases == []:
-            databases = aws_ext.glue_databases.get_all_databases(glue_client)
-        for db in databases:
-            logging.info(f"Entering db={db}")
-            result = aws_ext.glue_databases.delete_old_tables_versions(
-                glue_client, db, threshold, dryrun
-            )
-            print(result)
+        result = aws_ext.glue_databases.delete_old_tables_versions(
+            glue_client, databases, threshold, dryrun
+        )
+        print(result)
 
 
 def main():
